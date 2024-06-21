@@ -16,7 +16,7 @@ class NavigationUpgradeData extends ItemData(Constants.ItemName.NavigationUpgrad
 
   var map = new ItemStack(net.minecraft.item.Items.FILLED_MAP)
 
-  def mapData(world: World) = try FilledMapItem.getSavedData(map, world) catch {
+  def mapData(world: World) = try FilledMapItem.getOrCreateSavedData(map, world) catch {
     case _: Throwable => throw new Exception("invalid map")
   }
 
