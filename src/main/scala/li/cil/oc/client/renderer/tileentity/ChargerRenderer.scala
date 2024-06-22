@@ -37,7 +37,7 @@ class ChargerRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntity
       }
 
       stack.translate(-0.5f, 0.5f, 0.5f)
-      stack.scale(1, -1, 1)
+      RenderState.mirrorScale(stack, 1, -1, 1)
 
       val r = buffer.getBuffer(RenderTypes.BLOCK_OVERLAY)
 

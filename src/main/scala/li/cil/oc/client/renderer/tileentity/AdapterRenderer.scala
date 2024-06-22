@@ -29,7 +29,7 @@ class AdapterRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntity
       stack.pushPose()
 
       stack.translate(0.5, 0.5, 0.5)
-      stack.scale(1.0025f, -1.0025f, 1.0025f)
+      RenderState.mirrorScale(stack, 1.0025f, -1.0025f, 1.0025f)
       stack.translate(-0.5f, -0.5f, -0.5f)
 
       val r = buffer.getBuffer(RenderTypes.BLOCK_OVERLAY)

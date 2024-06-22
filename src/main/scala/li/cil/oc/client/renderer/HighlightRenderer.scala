@@ -45,7 +45,9 @@ object HighlightRenderer {
 
         if (Settings.get.hologramFlickerFrequency > 0 && random.nextDouble() < Settings.get.hologramFlickerFrequency) {
           val (sx, sy, sz) = (1 - math.abs(sideHit.getStepX), 1 - math.abs(sideHit.getStepY), 1 - math.abs(sideHit.getStepZ))
-          stack.scale(1f + (random.nextGaussian() * 0.01).toFloat, 1f + (random.nextGaussian() * 0.001).toFloat, 1f + (random.nextGaussian() * 0.01).toFloat)
+          stack.scale(Math.max(1f + (random.nextGaussian() * 0.01).toFloat, 0.001f),
+            Math.max(1f + (random.nextGaussian() * 0.001).toFloat, 0.001f),
+            Math.max(1f + (random.nextGaussian() * 0.01).toFloat, 0.001f))
           stack.translate((random.nextGaussian() * 0.01 * sx).toFloat, (random.nextGaussian() * 0.01 * sy).toFloat, (random.nextGaussian() * 0.01 * sz).toFloat)
         }
 

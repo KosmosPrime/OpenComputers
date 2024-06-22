@@ -43,7 +43,7 @@ object RackMountableRenderHandler {
         if (!stack.isEmpty) {
           val matrix = e.stack
           matrix.pushPose()
-          matrix.scale(1, -1, 1)
+          RenderState.mirrorScale(matrix, 1, -1, 1)
           matrix.translate(10 / 16f, -(3.5f + e.mountable * 3f) / 16f, -2 / 16f)
           matrix.mulPose(Vector3f.XN.rotationDegrees(90))
           matrix.scale(0.5f, 0.5f, 0.5f)

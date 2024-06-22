@@ -137,12 +137,14 @@ object HologramRenderer extends Function[TileEntityRendererDispatcher, HologramR
 
     // Do a bit of flickering, because that's what holograms do!
     if (Settings.get.hologramFlickerFrequency > 0 && random.nextDouble() < Settings.get.hologramFlickerFrequency) {
-      stack.scale(1 + random.nextGaussian().toFloat * 0.01f, 1 + random.nextGaussian().toFloat * 0.001f, 1 + random.nextGaussian().toFloat * 0.01f)
+      stack.scale(Math.max(1f + (random.nextGaussian() * 0.01).toFloat, 0.001f),
+        Math.max(1f + (random.nextGaussian() * 0.001).toFloat, 0.001f),
+        Math.max(1f + (random.nextGaussian() * 0.01).toFloat, 0.001f))
       stack.translate(random.nextGaussian() * 0.01, random.nextGaussian() * 0.01, random.nextGaussian() * 0.01)
     }
 
     // After the below scaling, hologram is drawn inside a [0..48]x[0..32]x[0..48] box
-    stack.scale(hologram.scale.toFloat / 16f, hologram.scale.toFloat / 16f, hologram.scale.toFloat / 16f)
+    RenderState.mirrorScale(stack, hologram.scale.toFloat / 16f, hologram.scale.toFloat / 16f, hologram.scale.toFloat / 16f)
 
     Textures.bind(Textures.Model.HologramEffect)
 

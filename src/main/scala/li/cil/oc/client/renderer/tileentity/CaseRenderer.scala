@@ -35,7 +35,7 @@ class CaseRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntityRen
     }
 
     stack.translate(-0.5, 0.5, 0.505)
-    stack.scale(1, -1, 1)
+    RenderState.mirrorScale(stack, 1, -1, 1)
 
     if (computer.isRunning) {
       renderFrontOverlay(stack, Textures.Block.CaseFrontOn, buffer.getBuffer(RenderTypes.BLOCK_OVERLAY))

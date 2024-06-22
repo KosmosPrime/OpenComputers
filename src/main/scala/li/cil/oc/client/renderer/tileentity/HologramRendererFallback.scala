@@ -20,7 +20,7 @@ object HologramRendererFallback {
 
     stack.pushPose()
     stack.translate(0.5, 0.75, 0.5)
-    stack.scale(1 / 128f, -1 / 128f, 1 / 128f)
+    RenderState.mirrorScale(stack, 1 / 128f, -1 / 128f, 1 / 128f)
 
     fontRenderer.drawInBatch(text, -fontRenderer.width(text) / 2, 0, 0xFFFFFFFF,
       false, stack.last.pose, buffer, false, 0, light)

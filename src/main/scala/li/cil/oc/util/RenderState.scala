@@ -1,10 +1,14 @@
 package li.cil.oc.util
 
+import com.mojang.blaze3d.matrix.MatrixStack
 import com.mojang.blaze3d.systems.RenderSystem
 import li.cil.oc.OpenComputers
 import li.cil.oc.Settings
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.vector.Matrix3f
+import net.minecraft.util.math.vector.Matrix4f
 import org.lwjgl.opengl._
 
 // This class has evolved into a wrapper for RenderSystem that basically does
@@ -83,5 +87,23 @@ object RenderState {
   def bindTexture(id: Int): Unit = {
     RenderSystem.bindTexture(id)
     GL11.glBindTexture(GL11.GL_TEXTURE_2D, id)
+  }
+
+  def mirrorScale(matrix: MatrixStack, sx: Float, sy: Float, sz: Float): Unit = {
+    matrix.last.pose.multiply(Matrix4f.createScaleMatrix(sx, sy, sz))
+    if (sx != sy || sx != sz || sx <= 0) {
+      val isx = 1 / sx
+      val isy = 1 / sy
+      val isz = 1 / sz
+      val invScale = isx * isy * isz
+      // Issue with vanilla impl: the inverse cube root algorithm completely fails for negative values.
+      var normScale = MathHelper.fastInvCubeRoot(MathHelper.abs(invScale))
+      if (invScale < 0)
+      {
+        // compensate for taking the absolute of invScale
+        normScale = -normScale
+      }
+      matrix.last.normal.mul(Matrix3f.createScaleMatrix(isx * normScale, isy * normScale, isz * normScale))
+    }
   }
 }

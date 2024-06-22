@@ -124,8 +124,7 @@ class Robot(state: container.Robot, playerInventory: PlayerInventory, name: ITex
       else if (scaleY > scale) {
         stack.translate(0, buffer.renderHeight * (scaleY - scale) / 2, 0)
       }
-      stack.scale(scale, scale, scale)
-      stack.scale(this.scale.toFloat, this.scale.toFloat, 1)
+      stack.scale(scale * this.scale.toFloat, scale * this.scale.toFloat, scale)
       BufferRenderer.drawText(stack, buffer)
     }
   }

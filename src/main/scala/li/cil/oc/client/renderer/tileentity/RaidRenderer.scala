@@ -39,7 +39,7 @@ class RaidRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntityRen
     }
 
     stack.translate(-0.5, 0.5, 0.505)
-    stack.scale(1, -1, 1)
+    RenderState.mirrorScale(stack, 1, -1, 1)
 
     val r = buffer.getBuffer(RenderTypes.BLOCK_OVERLAY)
 

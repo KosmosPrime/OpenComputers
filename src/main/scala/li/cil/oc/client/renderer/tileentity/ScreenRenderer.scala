@@ -111,7 +111,7 @@ class ScreenRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntityR
     stack.translate(0, screen.height, 0)
 
     // Flip text upside down.
-    stack.scale(1, -1, 1)
+    RenderState.mirrorScale(stack, 1, -1, 1)
   }
 
   private def isScreen(stack: ItemStack): Boolean = api.Items.get(stack) match {

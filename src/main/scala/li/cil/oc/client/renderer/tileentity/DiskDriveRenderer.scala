@@ -53,7 +53,7 @@ class DiskDriveRenderer(dispatch: TileEntityRendererDispatcher) extends TileEnti
 
     if (System.currentTimeMillis() - drive.lastAccess < 400 && drive.world.random.nextDouble() > 0.1) {
       matrix.translate(-0.5, 0.5, 0.505)
-      matrix.scale(1, -1, 1)
+      RenderState.mirrorScale(matrix, 1, -1, 1)
 
       val r = buffer.getBuffer(RenderTypes.BLOCK_OVERLAY)
 

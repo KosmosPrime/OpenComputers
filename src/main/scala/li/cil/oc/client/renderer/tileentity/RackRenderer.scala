@@ -41,7 +41,7 @@ class RackRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntityRen
     }
 
     stack.translate(-0.5, 0.5, 0.505 - 0.5f / 16f)
-    stack.scale(1, -1, 1)
+    RenderState.mirrorScale(stack, 1, -1, 1)
 
     // Note: we manually sync the rack inventory for this to work.
     val rackLight = WorldRenderer.getLightColor(rack.getLevel, rack.getBlockPos.relative(rack.facing))
