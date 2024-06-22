@@ -8,6 +8,7 @@ import li.cil.oc.api.event.RackMountableRenderEvent
 import li.cil.oc.common.tileentity.Rack
 import li.cil.oc.util.RenderState
 import net.minecraft.client.renderer.IRenderTypeBuffer
+import net.minecraft.client.renderer.WorldRenderer
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
 import net.minecraft.util.Direction
@@ -43,11 +44,12 @@ class RackRenderer(dispatch: TileEntityRendererDispatcher) extends TileEntityRen
     stack.scale(1, -1, 1)
 
     // Note: we manually sync the rack inventory for this to work.
+    val rackLight = WorldRenderer.getLightColor(rack.getLevel, rack.getBlockPos.relative(rack.facing))
     for (i <- 0 until rack.getContainerSize) {
       if (!rack.getItem(i).isEmpty) {
         val v0 = vOffset + i * vSize
         val v1 = vOffset + (i + 1) * vSize
-        val event = new RackMountableRenderEvent.TileEntity(rack, i, rack.lastData(i), stack, buffer, light, overlay, v0, v1)
+        val event = new RackMountableRenderEvent.TileEntity(rack, i, rack.lastData(i), stack, buffer, rackLight, overlay, v0, v1)
         MinecraftForge.EVENT_BUS.post(event)
       }
     }

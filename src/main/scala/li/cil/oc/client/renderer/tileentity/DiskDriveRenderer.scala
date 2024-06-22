@@ -10,6 +10,7 @@ import li.cil.oc.common.tileentity.DiskDrive
 import li.cil.oc.util.RenderState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.IRenderTypeBuffer
+import net.minecraft.client.renderer.WorldRenderer
 import net.minecraft.client.renderer.model.ItemCameraTransforms
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
@@ -44,7 +45,8 @@ class DiskDriveRenderer(dispatch: TileEntityRendererDispatcher) extends TileEnti
         matrix.mulPose(Vector3f.XN.rotationDegrees(90))
         matrix.scale(0.5f, 0.5f, 0.5f)
 
-        Minecraft.getInstance.getItemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, light, overlay, matrix, buffer)
+        val itemLight = WorldRenderer.getLightColor(drive.getLevel, drive.getBlockPos.relative(drive.facing))
+        Minecraft.getInstance.getItemRenderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, itemLight, overlay, matrix, buffer)
         matrix.popPose()
       case _ =>
     }
