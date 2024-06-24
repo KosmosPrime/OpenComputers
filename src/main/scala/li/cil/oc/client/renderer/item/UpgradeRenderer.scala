@@ -40,23 +40,23 @@ object UpgradeRenderer {
     descriptor == craftingUpgrade || descriptor == generatorUpgrade || descriptor == inventoryUpgrade
   }
 
-  def render(matrix: MatrixStack, buffer: IRenderTypeBuffer, stack: ItemStack, mountPoint: MountPoint): Unit = {
+  def render(matrix: MatrixStack, buffer: IRenderTypeBuffer, light: Int, stack: ItemStack, mountPoint: MountPoint): Unit = {
     val descriptor = api.Items.get(stack)
 
     if (descriptor == api.Items.get(Constants.ItemName.CraftingUpgrade)) {
-      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_CRAFTING), mountPoint)
+      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_CRAFTING), light, mountPoint)
 
       RenderState.checkError(getClass.getName + ".renderItem: crafting upgrade")
     }
 
     else if (descriptor == api.Items.get(Constants.ItemName.GeneratorUpgrade)) {
-      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_GENERATOR), mountPoint, if (Item.dataTag(stack).getInt("remainingTicks") > 0) 0.5f else 0)
+      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_GENERATOR), light, mountPoint, if (Item.dataTag(stack).getInt("remainingTicks") > 0) 0.5f else 0)
 
       RenderState.checkError(getClass.getName + ".renderItem: generator upgrade")
     }
 
     else if (descriptor == api.Items.get(Constants.ItemName.InventoryUpgrade)) {
-      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_INVENTORY), mountPoint)
+      drawSimpleBlock(matrix, buffer.getBuffer(RenderTypes.UPGRADE_INVENTORY), light, mountPoint)
 
       RenderState.checkError(getClass.getName + ".renderItem: inventory upgrade")
     }
@@ -65,38 +65,38 @@ object UpgradeRenderer {
   private val (minX, minY, minZ) = (-0.1f, -0.1f, -0.1f)
   private val (maxX, maxY, maxZ) = (0.1f, 0.1f, 0.1f)
 
-  private def drawSimpleBlock(stack: MatrixStack, r: IVertexBuilder, mountPoint: MountPoint, frontOffset: Float = 0) {
+  private def drawSimpleBlock(stack: MatrixStack, r: IVertexBuilder, light: Int, mountPoint: MountPoint, frontOffset: Float = 0) {
     stack.mulPose(new Vector3f(mountPoint.rotation.x, mountPoint.rotation.y, mountPoint.rotation.z).rotationDegrees(mountPoint.rotation.w))
     stack.translate(mountPoint.offset.x, mountPoint.offset.y, mountPoint.offset.z)
 
     // Front.
-    r.vertex(stack.last.pose, minX, minY, maxZ).uv(frontOffset, 0.5f).normal(stack.last.normal, 0, 0, 1).endVertex()
-    r.vertex(stack.last.pose, maxX, minY, maxZ).uv(frontOffset + 0.5f, 0.5f).normal(stack.last.normal, 0, 0, 1).endVertex()
-    r.vertex(stack.last.pose, maxX, maxY, maxZ).uv(frontOffset + 0.5f, 0).normal(stack.last.normal, 0, 0, 1).endVertex()
-    r.vertex(stack.last.pose, minX, maxY, maxZ).uv(frontOffset, 0).normal(stack.last.normal, 0, 0, 1).endVertex()
+    r.vertex(stack.last.pose, minX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(frontOffset, 0.5f).uv2(light).normal(stack.last.normal, 0, 0, 1).endVertex()
+    r.vertex(stack.last.pose, maxX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(frontOffset + 0.5f, 0.5f).uv2(light).normal(stack.last.normal, 0, 0, 1).endVertex()
+    r.vertex(stack.last.pose, maxX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(frontOffset + 0.5f, 0).uv2(light).normal(stack.last.normal, 0, 0, 1).endVertex()
+    r.vertex(stack.last.pose, minX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(frontOffset, 0).uv2(light).normal(stack.last.normal, 0, 0, 1).endVertex()
 
     // Top.
-    r.vertex(stack.last.pose, maxX, maxY, maxZ).uv(1, 0.5f).normal(stack.last.normal, 0, 1, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, maxY, minZ).uv(1, 1).normal(stack.last.normal, 0, 1, 0).endVertex()
-    r.vertex(stack.last.pose, minX, maxY, minZ).uv(0.5f, 1).normal(stack.last.normal, 0, 1, 0).endVertex()
-    r.vertex(stack.last.pose, minX, maxY, maxZ).uv(0.5f, 0.5f).normal(stack.last.normal, 0, 1, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(1, 0.5f).uv2(light).normal(stack.last.normal, 0, 1, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, maxY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(1, 1).uv2(light).normal(stack.last.normal, 0, 1, 0).endVertex()
+    r.vertex(stack.last.pose, minX, maxY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 1).uv2(light).normal(stack.last.normal, 0, 1, 0).endVertex()
+    r.vertex(stack.last.pose, minX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 0.5f).uv2(light).normal(stack.last.normal, 0, 1, 0).endVertex()
 
     // Bottom.
-    r.vertex(stack.last.pose, minX, minY, maxZ).uv(0.5f, 0.5f).normal(stack.last.normal, 0, -1, 0).endVertex()
-    r.vertex(stack.last.pose, minX, minY, minZ).uv(0.5f, 1).normal(stack.last.normal, 0, -1, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, minY, minZ).uv(1, 1).normal(stack.last.normal, 0, -1, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, minY, maxZ).uv(1, 0.5f).normal(stack.last.normal, 0, -1, 0).endVertex()
+    r.vertex(stack.last.pose, minX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 0.5f).uv2(light).normal(stack.last.normal, 0, -1, 0).endVertex()
+    r.vertex(stack.last.pose, minX, minY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 1).uv2(light).normal(stack.last.normal, 0, -1, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, minY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(1, 1).uv2(light).normal(stack.last.normal, 0, -1, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(1, 0.5f).uv2(light).normal(stack.last.normal, 0, -1, 0).endVertex()
 
     // Left.
-    r.vertex(stack.last.pose, maxX, maxY, maxZ).uv(0, 0.5f).normal(stack.last.normal, 1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, minY, maxZ).uv(0, 1).normal(stack.last.normal, 1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, minY, minZ).uv(0.5f, 1).normal(stack.last.normal, 1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, maxX, maxY, minZ).uv(0.5f, 0.5f).normal(stack.last.normal, 1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0, 0.5f).uv2(light).normal(stack.last.normal, 1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0, 1).uv2(light).normal(stack.last.normal, 1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, minY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 1).uv2(light).normal(stack.last.normal, 1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, maxX, maxY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 0.5f).uv2(light).normal(stack.last.normal, 1, 0, 0).endVertex()
 
     // Right.
-    r.vertex(stack.last.pose, minX, minY, maxZ).uv(0, 1).normal(stack.last.normal, -1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, minX, maxY, maxZ).uv(0, 0.5f).normal(stack.last.normal, -1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, minX, maxY, minZ).uv(0.5f, 0.5f).normal(stack.last.normal, -1, 0, 0).endVertex()
-    r.vertex(stack.last.pose, minX, minY, minZ).uv(0.5f, 1).normal(stack.last.normal, -1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, minX, minY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0, 1).uv2(light).normal(stack.last.normal, -1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, minX, maxY, maxZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0, 0.5f).uv2(light).normal(stack.last.normal, -1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, minX, maxY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 0.5f).uv2(light).normal(stack.last.normal, -1, 0, 0).endVertex()
+    r.vertex(stack.last.pose, minX, minY, minZ).color(0xFF, 0xFF, 0xFF, 0xFF).uv(0.5f, 1).uv2(light).normal(stack.last.normal, -1, 0, 0).endVertex()
   }
 }

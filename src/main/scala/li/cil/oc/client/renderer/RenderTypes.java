@@ -2,7 +2,6 @@ package li.cil.oc.client.renderer;
 
 import java.util.OptionalDouble;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.platform.GlStateManager;
 import li.cil.oc.OpenComputers;
@@ -19,13 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderTypes extends RenderType {
-    public static final VertexFormat POSITION_TEX_NORMAL = new VertexFormat(new ImmutableList.Builder<VertexFormatElement>()
-        .add(DefaultVertexFormats.ELEMENT_POSITION)
-        .add(DefaultVertexFormats.ELEMENT_UV0)
-        .add(DefaultVertexFormats.ELEMENT_NORMAL)
-        .add(DefaultVertexFormats.ELEMENT_PADDING)
-        .build());
-
     public static final TextureState ROBOT_CHASSIS_TEXTURE = new TextureState(Textures.Model$.MODULE$.Robot(), false, false);
 
     public static final RenderType ROBOT_CHASSIS = create(OpenComputers.ID() + ":robot_chassis",
@@ -43,8 +35,10 @@ public class RenderTypes extends RenderType {
 
     private static final RenderType createUpgrade(String name, ResourceLocation texture) {
         return create(OpenComputers.ID() + ":upgrade_" + name,
-            POSITION_TEX_NORMAL, GL11.GL_QUADS, 1024, State.builder()
+            DefaultVertexFormats.BLOCK, GL11.GL_QUADS, 2048, State.builder()
                 .setTextureState(new TextureState(texture, false, false))
+                .setDiffuseLightingState(DIFFUSE_LIGHTING)
+                .setLightmapState(LIGHTMAP)
                 .createCompositeState(true));
     }
 

@@ -74,7 +74,7 @@ public interface UpgradeRenderer {
      * @param robot      the robot the upgrade is rendered on.
      * @param pt         partial tick time, e.g. for animations.
      */
-    void render(MatrixStack matrix, IRenderTypeBuffer buffer, ItemStack stack, RobotRenderEvent.MountPoint mountPoint, Robot robot, float pt);
+    void render(MatrixStack matrix, IRenderTypeBuffer buffer, int light, ItemStack stack, RobotRenderEvent.MountPoint mountPoint, Robot robot, float pt);
 
     /**
      * Mount point names for {@link #computePreferredMountPoint}.
