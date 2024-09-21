@@ -526,12 +526,18 @@ object InternetCard {
               out.close()
             }
 
+            // Finish the connection. Call getInputStream a second time below to re-throw any exception.
+            // This avoids getResponseCode() waiting for the connection to end in the synchronized block.
+            try {
+              http.getInputStream
+            } catch {
+              case _: Exception =>
+            }
+
             HTTPRequest.this.synchronized {
               response = Some((http.getResponseCode, http.getResponseMessage, http.getHeaderFields))
             }
 
-            // Calling getInputStream() can cause an exception to be thrown for unsuccessful HTTP responses,
-            // so call it only after the response code/message are set to allow retrieving them.
             // TODO: This should allow accessing getErrorStream() for reading unsuccessful HTTP responses' output,
             // but this would be a breaking change for existing OC code.
             http.getInputStream

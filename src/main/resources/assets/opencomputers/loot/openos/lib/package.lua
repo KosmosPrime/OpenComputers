@@ -65,7 +65,7 @@ table.insert(searchers, function(module)
 
   library, status = loadfile(path)
   if not library then
-    error("error loading module '%s' from file '%s':\n\t%s", module, path, status)
+    error(string.format("error loading module '%s' from file '%s':\n\t%s", module, path, status))
   end
 
   return library, module

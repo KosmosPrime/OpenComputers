@@ -1,7 +1,8 @@
 ## Fixes/improvements
 
-* [#3710] Fix localization regression introduced in 1.8.4.
+* [#3731] Fix string.format() omission in OpenOS package.lua.
+* [#3735] Fix server hangs on long-lasting HTTP requests.
 
 ## List of contributors
 
-asie, Computerdores, ff66theone, Glease, Hawk777, repo-alt, RobertCochran, yut23
+asie, REUSS-dev
