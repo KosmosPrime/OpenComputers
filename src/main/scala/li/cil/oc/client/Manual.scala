@@ -86,7 +86,13 @@ object Manual extends ManualAPI {
 
   override def contentFor(path: String): java.lang.Iterable[String] = {
     val cleanPath = com.google.common.io.Files.simplifyPath(path)
-    val language = Minecraft.getInstance().getLanguageManager().getSelected().getCode()
+    val language = try {
+      Minecraft.getInstance().getLanguageManager().getSelected().getCode()
+    } catch {
+      case t: Throwable =>
+        OpenComputers.log.warn("The game threw an error when querying current language.", t)
+        FallbackLanguage
+    }
     contentForWithRedirects(cleanPath.replaceAll(LanguageKey, language)).
       orElse(contentForWithRedirects(cleanPath.replaceAll(LanguageKey, FallbackLanguage))).
       orNull

@@ -8,7 +8,7 @@ Gardez en tête que certains d'entre eux ne sont pas disponibles, en fonction de
 * [Boîtier d'ordinateur](case1.md)
 * [Micro-contrôleur](microcontroller.md)
 * [Robot](robot.md)
-* [Support de serveur](serverRack.md)
+* [Support de serveur](rack.md)
 
 ## Composants
 

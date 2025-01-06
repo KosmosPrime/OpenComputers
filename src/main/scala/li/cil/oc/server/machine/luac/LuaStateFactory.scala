@@ -1,5 +1,6 @@
 package li.cil.oc.server.machine.luac
 
+import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -242,8 +243,8 @@ abstract class LuaStateFactory {
       if (tmpLibFile.exists()) {
         var matching = true
         try {
-          val inCurrent = libraryUrl.openStream()
-          val inExisting = new FileInputStream(tmpLibFile)
+          val inCurrent = new BufferedInputStream(libraryUrl.openStream())
+          val inExisting = new BufferedInputStream(new FileInputStream(tmpLibFile))
           var inCurrentByte = 0
           var inExistingByte = 0
           do {

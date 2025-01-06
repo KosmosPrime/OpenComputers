@@ -140,8 +140,13 @@ function event.pullFiltered(...)
     filter = args[2]
   end
 
+  local deadline = computer.uptime() + (seconds or math.huge)
   repeat
-    local signal = table.pack(computer.pullSignal(seconds))
+    local waitTime = deadline - computer.uptime()
+    if waitTime <= 0 then
+      break
+    end
+    local signal = table.pack(computer.pullSignal(waitTime))
     if signal.n > 0 then
       if not (seconds or filter) or filter == nil or filter(table.unpack(signal, 1, signal.n)) then
         return table.unpack(signal, 1, signal.n)

@@ -708,7 +708,7 @@ object Network extends api.detail.NetworkAPI {
 
   // ----------------------------------------------------------------------- //
 
-  class Packet(var source: String, var destination: String, var port: Int, var data: Array[AnyRef], var ttl: Int = 5) extends api.network.Packet {
+  class Packet(var source: String, var destination: String, var port: Int, var data: Array[AnyRef], var ttl: Int = Settings.get.initialNetworkPacketTTL) extends api.network.Packet {
     val size = Option(data).fold(0)(values => {
       if (values.length > Settings.get.maxNetworkPacketParts) {
         throw new IllegalArgumentException("packet has too many parts")

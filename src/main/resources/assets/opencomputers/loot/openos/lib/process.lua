@@ -68,15 +68,19 @@ function process.load(path, env, init, name)
           if type(msg) == "table" and msg.reason == "terminated" then
             return msg.code or 0
           end
-          local stack = debug.traceback():gsub("^([^\n]*\n)[^\n]*\n[^\n]*\n","%1")
-          io.stderr:write(string.format("%s:\n%s", msg or "", stack))
-          return 128 -- syserr
+          return debug.traceback()
         end, ...)
     }
 
-    --result[1] is false if the exception handler also crashed
     if not result[1] and type(result[2]) ~= "number" then
-      io.stderr:write("process library exception handler crashed: ", tostring(result[2]))
+      -- run exception handler
+      xpcall(function()
+          local stack = result[2]:gsub("^([^\n]*\n)[^\n]*\n[^\n]*\n","%1")
+          io.stderr:write(string.format("%s:\n%s", msg or "", stack))
+        end,
+        function(msg)
+          io.stderr:write("process library exception handler crashed: ", tostring(msg))
+        end)
     end
 
     -- onError opens a file, you can't open a file without a process, we close the process last

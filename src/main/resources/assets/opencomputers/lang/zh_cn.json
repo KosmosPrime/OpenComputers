@@ -301,7 +301,7 @@
     "oc:tooltip.motionsensor": "可以检测附近生物的运动。生物需要在传感器视线范围内。",
     "oc:tooltip.nanomachines": "是控制单元，也是一批可摄入的纳米机器，只要你敢。",
     "oc:tooltip.networkcard": "让相隔很远但通过其他方块（比如线缆）相连的电脑能够通过发送报文进行交互。",
-    "oc:tooltip.PowerAcceptor": "能量转换速度: §f%s/t§7",
+    "oc:tooltip.poweracceptor": "能量转换速度: §f%s/t§7",
     "oc:tooltip.powerconverter.BuildCraft": "§fBuildcraft MJ§7: §a%s:%s§7",
     "oc:tooltip.powerconverter.Factorization": "§fFactorization Charge§7: §a%s:%s§7",
     "oc:tooltip.powerconverter.IndustrialCraft2": "§fIndustrialCraft² EU§7: §a%s:%s§7",
