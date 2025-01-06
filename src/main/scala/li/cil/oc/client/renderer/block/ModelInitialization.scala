@@ -146,7 +146,6 @@ object ModelInitialization {
       }
       case _ =>
     }
-    meshableItems.clear()
 
     val modelOverrides = Map[String, IBakedModel => IBakedModel](
       Constants.BlockName.ScreenTier1 -> (_ => ScreenModel),
