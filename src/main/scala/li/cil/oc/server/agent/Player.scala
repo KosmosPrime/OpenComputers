@@ -151,7 +151,7 @@ object Player {
 }
 
 class Player(val agent: internal.Agent) extends FakePlayer(agent.world.asInstanceOf[ServerWorld], Player.profileFor(agent)) {
-  connection= new ServerPlayNetHandler(server, FakeNetworkManager, this)
+  connection = new ServerPlayNetHandler(server, new FakeNetworkManager(), this)
 
   abilities.mayfly = true
   abilities.invulnerable = true

@@ -32,9 +32,11 @@ object RenderState {
   }
 
   def checkError(where: String) {
-    val error = GL11.glGetError
-    if (error != 0 && Settings.get.logOpenGLErrors) {
-      OpenComputers.log.warn("GL ERROR @ " + where + ": " + getErrorString(error))
+    if (Settings.get.logOpenGLErrors) {
+      val error = GL11.glGetError
+      if (error != 0 && Settings.get.logOpenGLErrors) {
+        OpenComputers.log.warn("GL ERROR @ " + where + ": " + getErrorString(error))
+      }
     }
   }
 

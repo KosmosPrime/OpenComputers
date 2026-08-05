@@ -507,6 +507,9 @@ class Settings(val config: Config) {
 
   // >= 1.8.8
   val httpUserAgent = config.getString("internet.httpUserAgent")
+
+  // >= 1.8.10
+  val maxClipboardTextLength = config.getInt("misc.maxClipboard")
 }
 
 object Settings {
@@ -607,6 +610,10 @@ object Settings {
     // Upgrading to version 1.8.0, changed meaning of limitFlightHeight value,
     VersionRange.createFromVersionSpec("[0.0, 1.8.0)") -> Array(
       "computer.robot.limitFlightHeight"
+    ),
+    // Upgrading to version 1.8.10, maxClipboard is properly respected now.
+    VersionRange.createFromVersionSpec("[0.0, 1.8.10)") -> Array(
+      "misc.maxClipboard"
     )
   )
   private val fileringRulesPatchVersion = VersionRange.createFromVersionSpec("[0.0, 1.8.3)")

@@ -22,6 +22,47 @@ import org.apache.commons.lang3.SystemUtils
 import scala.util.Random
 
 object LuaStateFactory {
+  // Native Lua factories initialize one after another (5.2, 5.3, 5.4).
+  // Clean stale extracted OC natives exactly once, before the first factory
+  // extracts/loads anything for this JVM. Without the guard, a later factory
+  // could delete a library that an earlier factory just extracted.
+  private var cleanedOldLibraries = false
+
+  private def cleanupOldLibraries(libDir: File): Unit = synchronized {
+    if (cleanedOldLibraries) {
+      return
+    }
+
+    cleanedOldLibraries = true
+
+    if (!libDir.isDirectory) {
+      return
+    }
+
+    val files = libDir.listFiles(new PatternFilenameFilter(
+      "^" + Pattern.quote("OpenComputersMod-") + ".*\\.(dll|so|dylib)$"
+    ))
+
+    if (files != null) {
+      for (file <- files if file.isFile) {
+        try {
+          if (file.delete()) {
+            OpenComputers.log.debug(s"Deleted stale native library '${file.getName}'.")
+          }
+          else if (file.exists()) {
+            // This is expected on Windows if another running JVM still has
+            // the native library loaded and therefore locked.
+            OpenComputers.log.debug(s"Could not delete stale native library '${file.getName}'. It may still be in use.")
+          }
+        }
+        catch {
+          case t: Throwable =>
+            OpenComputers.log.debug(s"Could not delete stale native library '${file.getName}'.", t)
+        }
+      }
+    }
+  }
+
   def isAvailable: Boolean = {
     // Force initialization of all.
     val lua52 = Lua52.isAvailable
@@ -223,19 +264,19 @@ abstract class LuaStateFactory {
         else if (path.endsWith("/") || path.endsWith("\\")) path
         else path + "/"
       }
-      else "./"
+      else {
+        val path = new File("opencomputers/natives")
+        path.mkdirs()
+        path.getAbsolutePath + File.separator
+      }
       tmpLibFile = new File(tmpBasePath + tmpLibName)
 
-      // Clean up old library files when not in tmp dir.
+      // Clean up stale OC native libraries once before this run extracts and
+      // loads any of its bundled natives. Do not do this once per Lua version:
+      // Lua 5.3/5.4 initialization must not delete the library Lua 5.2 just
+      // extracted and loaded.
       if (!Settings.get.nativeInTmpDir) {
-        val libDir = new File(tmpBasePath)
-        if (libDir.isDirectory) {
-          for (file <- libDir.listFiles(new PatternFilenameFilter("^" + Pattern.quote("OpenComputersMod-") + ".*" + Pattern.quote("-" + libraryName) + "$"))) {
-            if (file.compareTo(tmpLibFile) != 0) {
-              file.delete()
-            }
-          }
-        }
+        LuaStateFactory.cleanupOldLibraries(new File(tmpBasePath))
       }
 
       // If the file, already exists, make sure it's the same we need, if it's

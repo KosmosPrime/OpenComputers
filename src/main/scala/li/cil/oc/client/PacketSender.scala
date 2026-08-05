@@ -94,7 +94,7 @@ object PacketSender {
 
   def sendClipboard(address: String, value: String) {
     if (value != null && !value.isEmpty) {
-      if (value.length > 64 * 1024 || System.currentTimeMillis() < clipboardCooldown) {
+      if (value.length > Settings.get.maxClipboardTextLength || System.currentTimeMillis() < clipboardCooldown) {
         val handler = Minecraft.getInstance.getSoundManager
         handler.play(SimpleSound.forUI(SoundEvents.NOTE_BLOCK_HARP, 1, 1))
       }

@@ -1,11 +1,17 @@
 ## Fixes/improvements
 
-* [#3621] Fix `os.time()` being off by one hour
-* [#3682] Add error handling to the `flash` OpenOS program
-* [#3764] Fix left and right names being swapped in the Rack GUI
-* [#3779] Fix `os.sleep(0)` causing `too long without yielding` (Ocawesome101)
-* (1.12) [#3774] Fix Jukebox driver (kebufu)
+* [#3784] Added three new robot names (airone01)
+* Fixed Blood Altars (Blood Magic) returning the incorrect value for getSacrificeMultiplier. (hinyb)
+* Fixed client leak in Sound.
+* Fixed clipboard length not being validated on the server side.
+* Fixed network filtering not protecting against NAT64 accesses by default.
+* Fixed non-local addresses not being specifiable by the ip: filtering rule.
+* Fixed Redstone IO block missing particles on destruction. (zeng-github01)
+* Fixed server leaks in Player, SideTracker and StaticSimpleEnvironment. (Alexdoru)
+* glGetError() is no longer called if logging GL errors is disabled. (mitchej123)
+* Improved Polish translation.
+* OpenComputers native libraries are now stored in an `opencomputers/natives` subdirectory. (CaitlynMainer)
 
 ## List of contributors
 
-asie, kebufu, Ocawesome101
+airone01, Alexdoru, asie, CaitlynMainer, hinyb, mitchej123, zeng-github01

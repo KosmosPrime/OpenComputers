@@ -14,4 +14,5 @@ public final class SideTracker {
     public static boolean isClient() {
         return !isServer();
     }
+
 }
