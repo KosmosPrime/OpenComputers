@@ -132,6 +132,13 @@ compileScala {
 
 repositories {
     maven {
+        name "MinecraftForge"
+        url "https://files.minecraftforge.net/maven"
+        content {
+            includeGroup "net.minecraftforge"
+        }
+    }
+    maven {
         name "MightyPirates"
         url "https://maven.cil.li/"
         metadataSources {
@@ -168,12 +175,6 @@ repositories {
         }
     }
     maven {
-        url "https://modmaven.dev"
-        content {
-            includeGroup "mezz.jei"
-        }
-    }
-    maven {
         url "https://chickenbones.net/maven/"
         content {
             includeGroup "codechicken"
@@ -181,16 +182,17 @@ repositories {
         }
     }
     maven {
-        url "https://modmaven.dev/"
-        content {
-            includeGroup "appeng"
-            includeGroup "mekanism"
-        }
-    }
-    maven {
         url "https://proxy-maven.covers1624.net/"
         content {
             includeModule "net.minecraftforge", "Scorge"
+        }
+    }
+    maven {
+        url "https://modmaven.dev"
+        content {
+            includeGroup "mezz.jei"
+            includeGroup "appeng"
+            includeGroup "mekanism"
         }
     }
     mavenCentral()
